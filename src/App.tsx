@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
 import Recherche from './pages/Recherche'
+import GeneDetails from './pages/GeneDetails'
 import ProteineDetail from './pages/ProteineDetail'
 import Education from './pages/Education'
 import APropos from './pages/APropos'
@@ -16,7 +17,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/recherche" element={<Recherche />} />
-            <Route path="/proteine/:id" element={<ProteineDetail />} />
+            <Route path="/gene/:geneName" element={<GeneDetails />} />
+            <Route path="/gene/:geneName/proteine/:uniprotId" element={<ProteineDetail />} />
             <Route path="/education" element={<Education />} />
             <Route path="/apropos" element={<APropos />} />
           </Routes>
