@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useEffect, useRef } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { searchGeneProteins, getProteinFullName } from '../services/uniprot'
 import { translateToFrench } from '../services/translation'
 import { genes, genesStaticData, type GeneStaticData } from '../data/genesData'
+import { searchGenes, type GeneSearchResult } from '../services/geneSearch'
 
 interface GeneInfo {
   name: string
@@ -14,10 +15,64 @@ interface GeneInfo {
 function Recherche() {
   const [searchTerm, setSearchTerm] = useState('')
   const [genesInfo, setGenesInfo] = useState<Record<string, GeneInfo>>({})
+  const [autocompleteResults, setAutocompleteResults] = useState<GeneSearchResult[]>([])
+  const [showAutocomplete, setShowAutocomplete] = useState(false)
+  const [isSearching, setIsSearching] = useState(false)
+  const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const autocompleteRef = useRef<HTMLDivElement>(null)
+  const navigate = useNavigate()
 
   const filteredGenes = genes.filter(
     gene => gene.toLowerCase().includes(searchTerm.toLowerCase())
   )
+
+  // Recherche d'autocomplétion
+  useEffect(() => {
+    if (searchTerm.length >= 2) {
+      // Annuler la recherche précédente
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current)
+      }
+
+      // Délai pour éviter trop de requêtes
+      searchTimeoutRef.current = setTimeout(async () => {
+        setIsSearching(true)
+        const results = await searchGenes(searchTerm)
+        setAutocompleteResults(results)
+        setShowAutocomplete(results.length > 0)
+        setIsSearching(false)
+      }, 300)
+    } else {
+      setAutocompleteResults([])
+      setShowAutocomplete(false)
+    }
+
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current)
+      }
+    }
+  }, [searchTerm])
+
+  // Fermer l'autocomplétion quand on clique en dehors
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (autocompleteRef.current && !autocompleteRef.current.contains(event.target as Node)) {
+        setShowAutocomplete(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
+
+  const handleGeneSelect = (geneName: string) => {
+    setSearchTerm('')
+    setShowAutocomplete(false)
+    navigate(`/gene/${geneName}`)
+  }
 
   // Charger les descriptions des gènes depuis UniProt
   useEffect(() => {
@@ -86,24 +141,75 @@ function Recherche() {
             Explorez les gènes et découvrez leurs protéines, isoformes et structures 3D
           </p>
 
-          {/* Search Bar */}
-          <div className="mb-8">
+          {/* Search Bar avec autocomplétion */}
+          <div className="mb-8" ref={autocompleteRef}>
             <div className="relative">
               <input
                 type="text"
-                placeholder="Rechercher un gène (ex : BRCA1, TP53, EGFR...)"
+                placeholder="Rechercher un gène (ex : BRCA1, TP53, EGFR, MYC, KRAS, ALK...) ou tapez pour chercher..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value)
+                  setShowAutocomplete(true)
+                }}
+                onFocus={() => {
+                  if (autocompleteResults.length > 0) {
+                    setShowAutocomplete(true)
+                  }
+                }}
                 className="w-full px-6 py-4 text-lg bg-gray-800 text-white border-2 border-gray-700 rounded-lg focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all placeholder-gray-400"
               />
-              <svg
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 h-6 w-6 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
+              {isSearching ? (
+                <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-400"></div>
+                </div>
+              ) : (
+                <svg
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 h-6 w-6 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              )}
+
+              {/* Dropdown d'autocomplétion */}
+              {showAutocomplete && autocompleteResults.length >= 0 && (
+                <div className="absolute z-50 w-full mt-2 bg-gray-800 border border-gray-700 rounded-lg shadow-2xl max-h-96 overflow-y-auto">
+                  <div className="p-2">
+                    <div className="text-xs text-gray-400 px-3 py-2 mb-1 border-b border-gray-700">
+                      Suggestions de gènes
+                    </div>
+                    {autocompleteResults.map((result, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handleGeneSelect(result.geneName)}
+                        className="w-full text-left px-4 py-3 hover:bg-gray-700 rounded-md transition-colors group"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex-1">
+                            <div className="font-semibold text-blue-400 group-hover:text-blue-300">
+                              {result.geneName}
+                            </div>
+                            <div className="text-sm text-gray-400 mt-1 truncate">
+                              {result.description}
+                            </div>
+                          </div>
+                          <svg
+                            className="w-5 h-5 text-gray-500 group-hover:text-blue-400 ml-2"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 

@@ -268,3 +268,102 @@ export function extractGeneName(entry: UniProtEntry | null): string | null {
   return null
 }
 
+/**
+ * Extrait la localisation subcellulaire depuis les commentaires UniProt
+ */
+export function extractSubcellularLocation(entry: UniProtEntry | null): string[] {
+  if (!entry?.comments) return []
+  
+  const locationComments = entry.comments.filter(c => c.commentType === 'SUBCELLULAR_LOCATION')
+  const locations: string[] = []
+  
+  locationComments.forEach(comment => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const subcellularLocations = (comment as any).subcellularLocations
+    if (subcellularLocations && Array.isArray(subcellularLocations)) {
+      subcellularLocations.forEach((location: any) => {
+        if (location.location?.value) {
+          locations.push(location.location.value)
+        }
+      })
+    }
+    
+    // Vérifier aussi dans texts
+    if (comment.texts && Array.isArray(comment.texts)) {
+      comment.texts.forEach(text => {
+        if (text.value && typeof text.value === 'string') {
+          const locationMatch = text.value.match(/^([^;]+)/)
+          if (locationMatch && locationMatch[1]) {
+            locations.push(locationMatch[1].trim())
+          }
+        }
+      })
+    }
+  })
+  
+  return [...new Set(locations)] // Supprime les doublons
+}
+
+/**
+ * Extrait les domaines et régions fonctionnelles depuis les features UniProt
+ */
+export function extractDomainsAndFeatures(entry: UniProtEntry | null): Array<{ type: string; description?: string; location?: string }> {
+  if (!entry?.features) return []
+  
+  const importantFeatures = ['domain', 'region', 'repeat', 'motif', 'binding site', 'active site', 'transmembrane region']
+  
+  return entry.features
+    .filter(feature => feature.type && importantFeatures.some(imp => feature.type.toLowerCase().includes(imp.toLowerCase())))
+    .map(feature => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const location = (feature as any).location
+      let locationStr = ''
+      if (location?.start?.value && location?.end?.value) {
+        locationStr = `${location.start.value}-${location.end.value}`
+      }
+      
+      return {
+        type: feature.type || '',
+        description: feature.description || '',
+        location: locationStr
+      }
+    })
+    .slice(0, 20) // Limiter à 20 features pour ne pas surcharger
+}
+
+/**
+ * Calcule la masse moléculaire approximative à partir de la séquence
+ */
+export function calculateMolecularWeight(sequence: { value: string; length: number } | null): number | null {
+  if (!sequence?.value) return null
+  
+  // Masses des acides aminés en Da
+  const aaMasses: Record<string, number> = {
+    'A': 71.08, 'R': 156.19, 'N': 114.11, 'D': 115.09, 'C': 103.14,
+    'E': 129.12, 'Q': 128.14, 'G': 57.05, 'H': 137.14, 'I': 113.16,
+    'L': 113.16, 'K': 128.17, 'M': 131.20, 'F': 147.18, 'P': 97.12,
+    'S': 87.08, 'T': 101.11, 'W': 186.22, 'Y': 163.18, 'V': 99.13
+  }
+  
+  let totalMass = 18.02 // Masse de l'eau (H2O) pour la chaîne complète
+  
+  for (const aa of sequence.value) {
+    if (aaMasses[aa.toUpperCase()]) {
+      totalMass += aaMasses[aa.toUpperCase()]
+    }
+  }
+  
+  return Math.round(totalMass * 10) / 10 // Arrondir à 1 décimale
+}
+
+/**
+ * Extrait les noms alternatifs de la protéine
+ */
+export function extractAlternativeNames(entry: UniProtEntry | null): string[] {
+  if (!entry?.proteinDescription?.alternativeNames) return []
+  
+  return entry.proteinDescription.alternativeNames
+    .map(alt => alt.fullName?.value)
+    .filter((name): name is string => !!name)
+}
+

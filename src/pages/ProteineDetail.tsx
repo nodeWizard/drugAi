@@ -10,6 +10,9 @@ import {
   extractFunction, 
   extractDiseases, 
   getProteinFullName,
+  extractSubcellularLocation,
+  calculateMolecularWeight,
+  extractAlternativeNames,
   type UniProtEntry 
 } from '../services/uniprot'
 import { translateToFrench } from '../services/translation'
@@ -23,6 +26,9 @@ function ProteineDetail() {
   const [proteinFullName, setProteinFullName] = useState('')
   const [functionDescription, setFunctionDescription] = useState('')
   const [diseases, setDiseases] = useState<string[]>([])
+  const [subcellularLocations, setSubcellularLocations] = useState<string[]>([])
+  const [molecularWeight, setMolecularWeight] = useState<number | null>(null)
+  const [alternativeNames, setAlternativeNames] = useState<string[]>([])
 
   // Charger les informations de la protéine depuis UniProt
   useEffect(() => {
@@ -79,17 +85,24 @@ function ProteineDetail() {
       const fullName = getProteinFullName(protein)
       const functionDesc = extractFunction(protein)
       const diseaseList = extractDiseases(protein)
+      const locations = extractSubcellularLocation(protein)
+      const weight = calculateMolecularWeight(protein.sequence || null)
+      const altNames = extractAlternativeNames(protein)
 
       // Traduire en parallèle
-      const [translatedName, translatedFunction, translatedDiseases] = await Promise.all([
+      const [translatedName, translatedFunction, translatedDiseases, translatedLocations] = await Promise.all([
         translateToFrench(fullName),
         functionDesc ? translateToFrench(functionDesc) : Promise.resolve(''),
-        Promise.all(diseaseList.map(d => translateToFrench(d)))
+        Promise.all(diseaseList.map(d => translateToFrench(d))),
+        Promise.all(locations.map(l => translateToFrench(l)))
       ])
 
       setProteinFullName(translatedName)
       setFunctionDescription(translatedFunction)
       setDiseases(translatedDiseases)
+      setSubcellularLocations(translatedLocations)
+      setMolecularWeight(weight)
+      setAlternativeNames(altNames)
     }
 
     translateProteinInfo()
@@ -175,8 +188,26 @@ function ProteineDetail() {
                     </div>
                     {alphafoldData.globalMetricValue !== undefined && (
                       <div>
-                        <p className="text-gray-400 mb-1">Score de confiance</p>
+                        <p className="text-gray-400 mb-1">Score de confiance global (LDDT)</p>
                         <p className="text-white font-semibold">{alphafoldData.globalMetricValue.toFixed(1)}%</p>
+                      </div>
+                    )}
+                    {alphafoldData.fractionPlddtVeryHigh !== undefined && (
+                      <div>
+                        <p className="text-gray-400 mb-1">Régions très confiantes</p>
+                        <p className="text-white">{(alphafoldData.fractionPlddtVeryHigh * 100).toFixed(1)}%</p>
+                      </div>
+                    )}
+                    {alphafoldData.fractionPlddtConfident !== undefined && (
+                      <div>
+                        <p className="text-gray-400 mb-1">Régions confiantes</p>
+                        <p className="text-white">{(alphafoldData.fractionPlddtConfident * 100).toFixed(1)}%</p>
+                      </div>
+                    )}
+                    {alphafoldData.fractionPlddtLow !== undefined && (
+                      <div>
+                        <p className="text-gray-400 mb-1">Régions faible confiance</p>
+                        <p className="text-white">{(alphafoldData.fractionPlddtLow * 100).toFixed(1)}%</p>
                       </div>
                     )}
                   </div>
@@ -253,28 +284,110 @@ function ProteineDetail() {
           </section>
           )}
 
-          {/* Informations supplémentaires */}
-          <section className="bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-700 hover:border-gray-600 transition-colors">
-            <h2 className="text-2xl font-bold text-white mb-4">Informations supplémentaires</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <p className="text-gray-400 mb-1">Organisme</p>
-                <p className="text-white">{protein.organism?.scientificName || 'Homo sapiens'}</p>
-              </div>
-              {protein.sequence && (
-                <div>
-                  <p className="text-gray-400 mb-1">Longueur de la séquence</p>
-                  <p className="text-white">{protein.sequence.length} acides aminés</p>
-                </div>
-              )}
-              {protein.annotationScore !== undefined && (
-                <div>
-                  <p className="text-gray-400 mb-1">Score d'annotation</p>
-                  <p className="text-white">{protein.annotationScore}/5</p>
-                </div>
-              )}
-            </div>
-          </section>
+                  {/* Séquence d'acides aminés */}
+                  {protein.sequence && (
+                    <section className="bg-gray-800 rounded-lg shadow-lg p-6 mb-8 border border-gray-700 hover:border-gray-600 transition-colors">
+                      <h2 className="text-2xl font-bold text-white mb-4">Séquence d'acides aminés</h2>
+                      <div className="mb-4">
+                        <p className="text-gray-400 mb-2">
+                          Longueur : <span className="text-white font-semibold">{protein.sequence.length}</span> acides aminés
+                        </p>
+                      </div>
+                      <div className="bg-gray-900 rounded-lg p-4 border border-gray-700 overflow-x-auto">
+                        <div className="font-mono text-sm text-green-300 break-all whitespace-pre-wrap leading-relaxed">
+                          {protein.sequence.value}
+                        </div>
+                      </div>
+                      <p className="text-xs text-gray-500 mt-3">
+                        Séquence au format à une lettre (IUPAC). Chaque lettre représente un acide aminé.
+                      </p>
+                    </section>
+                  )}
+
+                  {/* Noms alternatifs */}
+                  {alternativeNames.length > 0 && (
+                    <section className="bg-gray-800 rounded-lg shadow-lg p-6 mb-8 border border-gray-700 hover:border-gray-600 transition-colors">
+                      <h2 className="text-2xl font-bold text-white mb-4">Noms alternatifs</h2>
+                      <div className="flex flex-wrap gap-2">
+                        {alternativeNames.map((name, index) => (
+                          <span
+                            key={index}
+                            className="inline-block bg-blue-900/30 border border-blue-700/50 rounded px-3 py-1.5 text-sm text-blue-300"
+                          >
+                            {name}
+                          </span>
+                        ))}
+                      </div>
+                    </section>
+                  )}
+
+                  {/* Localisation subcellulaire */}
+                  {subcellularLocations.length > 0 && (
+                    <section className="bg-gray-800 rounded-lg shadow-lg p-6 mb-8 border border-gray-700 hover:border-gray-600 transition-colors">
+                      <h2 className="text-2xl font-bold text-white mb-4">Localisation subcellulaire</h2>
+                      <div className="flex flex-wrap gap-2">
+                        {subcellularLocations.map((location, index) => (
+                          <span
+                            key={index}
+                            className="inline-block bg-purple-900/30 border border-purple-700/50 rounded px-3 py-1.5 text-sm text-purple-300"
+                          >
+                            {location}
+                          </span>
+                        ))}
+                      </div>
+                    </section>
+                  )}
+
+                  {/* Informations supplémentaires */}
+                  <section className="bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-700 hover:border-gray-600 transition-colors">
+                    <h2 className="text-2xl font-bold text-white mb-4">Informations supplémentaires</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <div>
+                        <p className="text-gray-400 mb-1">Organisme</p>
+                        <p className="text-white">{protein.organism?.scientificName || 'Homo sapiens'}</p>
+                        {protein.organism?.commonName && (
+                          <p className="text-gray-500 text-sm mt-1">({protein.organism.commonName})</p>
+                        )}
+                      </div>
+                      {protein.sequence && (
+                        <div>
+                          <p className="text-gray-400 mb-1">Longueur de la séquence</p>
+                          <p className="text-white">{protein.sequence.length} acides aminés</p>
+                        </div>
+                      )}
+                      {molecularWeight && (
+                        <div>
+                          <p className="text-gray-400 mb-1">Masse moléculaire</p>
+                          <p className="text-white">{molecularWeight.toLocaleString()} Da</p>
+                        </div>
+                      )}
+                      {protein.annotationScore !== undefined && (
+                        <div>
+                          <p className="text-gray-400 mb-1">Score d'annotation</p>
+                          <p className="text-white">{protein.annotationScore}/5</p>
+                        </div>
+                      )}
+                      {protein.primaryAccession && (
+                        <div>
+                          <p className="text-gray-400 mb-1">UniProt ID</p>
+                          <a
+                            href={`https://www.uniprot.org/uniprotkb/${protein.primaryAccession}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-400 hover:text-blue-300 font-mono"
+                          >
+                            {protein.primaryAccession}
+                          </a>
+                        </div>
+                      )}
+                      {alphafoldData?.entryId && (
+                        <div>
+                          <p className="text-gray-400 mb-1">AlphaFold Entry ID</p>
+                          <p className="text-white font-mono text-sm">{alphafoldData.entryId}</p>
+                        </div>
+                      )}
+                    </div>
+                  </section>
         </div>
       </div>
     </div>
