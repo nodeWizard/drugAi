@@ -50,13 +50,13 @@ function Recherche() {
   )
 
   return (
-    <div className="bg-gray-50">
+    <div className="min-h-screen">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-16">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Recherche de protéines
           </h1>
-          <p className="text-lg text-gray-600 mb-8">
+          <p className="text-lg text-gray-300 mb-8">
             Explorez notre base de données de protéines et découvrez leur rôle dans les maladies
           </p>
 
@@ -68,7 +68,7 @@ function Recherche() {
                 placeholder="Rechercher une protéine (ex : BRCA1, TP53...)"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-6 py-4 text-lg border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all"
+                className="w-full px-6 py-4 text-lg bg-gray-800 text-white border-2 border-gray-700 rounded-lg focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all placeholder-gray-400"
               />
               <svg
                 className="absolute right-4 top-1/2 transform -translate-y-1/2 h-6 w-6 text-gray-400"
@@ -82,7 +82,7 @@ function Recherche() {
           </div>
 
           {/* Results */}
-          <div className="mb-4 text-gray-600">
+          <div className="mb-4 text-gray-400">
             {filteredProteins.length > 0 ? (
               <p>{filteredProteins.length} protéine{filteredProteins.length > 1 ? 's' : ''} trouvée{filteredProteins.length > 1 ? 's' : ''}</p>
             ) : (
@@ -95,13 +95,13 @@ function Recherche() {
             {filteredProteins.map((protein) => (
               <div
                 key={protein.id}
-                className="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 p-6"
+                className="bg-gray-800 rounded-lg shadow-lg hover:shadow-2xl hover:bg-gray-700 transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.02] border border-gray-700 hover:border-blue-500 p-6"
               >
-                <h2 className="text-2xl font-bold text-blue-600 mb-3">{protein.name}</h2>
-                <p className="text-gray-600 mb-4">{protein.desc}</p>
+                <h2 className="text-2xl font-bold text-blue-400 mb-3">{protein.name}</h2>
+                <p className="text-gray-300 mb-4">{protein.desc}</p>
                 <Link
                   to={`/proteine/${protein.id}`}
-                  className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-md transition-colors"
+                  className="inline-block bg-blue-600 hover:bg-blue-500 text-white font-medium px-4 py-2 rounded-md transition-all hover:scale-105 shadow-md hover:shadow-lg"
                 >
                   Voir les détails
                 </Link>

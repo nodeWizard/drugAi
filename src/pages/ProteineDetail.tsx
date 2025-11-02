@@ -76,10 +76,10 @@ function ProteineDetail() {
 
   if (!protein) {
     return (
-      <div className="bg-gray-50">
+      <div className="min-h-screen">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-16 text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Protéine non trouvée</h1>
-          <Link to="/recherche" className="text-blue-600 hover:text-blue-700">
+          <h1 className="text-3xl font-bold text-white mb-4">Protéine non trouvée</h1>
+          <Link to="/recherche" className="text-blue-400 hover:text-blue-300 transition-colors">
             Retour à la recherche
           </Link>
         </div>
@@ -88,12 +88,12 @@ function ProteineDetail() {
   }
 
   return (
-    <div className="bg-gray-50">
+    <div className="min-h-screen">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-16">
         <div className="max-w-6xl mx-auto">
           <Link
             to="/recherche"
-            className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-6 transition-colors"
+            className="inline-flex items-center text-blue-400 hover:text-blue-300 mb-6 transition-colors"
           >
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -101,42 +101,42 @@ function ProteineDetail() {
             Retour à la recherche
           </Link>
 
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">{protein.name}</h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-8">{protein.name}</h1>
 
           {/* Structure 3D Section */}
-          <section className="bg-white rounded-lg shadow-md p-6 mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Structure 3D</h2>
-            <div className="bg-gray-100 rounded-lg p-8 text-center min-h-[400px] flex items-center justify-center">
-              <div className="text-gray-500">
+          <section className="bg-gray-800 rounded-lg shadow-lg p-6 mb-8 border border-gray-700 hover:border-gray-600 transition-colors">
+            <h2 className="text-2xl font-bold text-white mb-4">Structure 3D</h2>
+            <div className="bg-gray-900 rounded-lg p-8 text-center min-h-[400px] flex items-center justify-center border border-gray-700">
+              <div className="text-gray-400">
                 <svg className="w-24 h-24 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                 </svg>
-                <p className="text-lg">Visualisation 3D de {protein.name}</p>
+                <p className="text-lg text-gray-300">Visualisation 3D de {protein.name}</p>
                 <p className="text-sm mt-2">(Intégration 3Dmol.js possible ici)</p>
               </div>
             </div>
           </section>
 
           {/* Fonction biologique */}
-          <section className="bg-white rounded-lg shadow-md p-6 mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Fonction biologique</h2>
-            <p className="text-gray-700 leading-relaxed">{protein.fullDesc}</p>
+          <section className="bg-gray-800 rounded-lg shadow-lg p-6 mb-8 border border-gray-700 hover:border-gray-600 transition-colors">
+            <h2 className="text-2xl font-bold text-white mb-4">Fonction biologique</h2>
+            <p className="text-gray-300 leading-relaxed">{protein.fullDesc}</p>
           </section>
 
           {/* Maladies associées */}
-          <section className="bg-white rounded-lg shadow-md p-6 mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Maladies associées</h2>
+          <section className="bg-gray-800 rounded-lg shadow-lg p-6 mb-8 border border-gray-700 hover:border-gray-600 transition-colors">
+            <h2 className="text-2xl font-bold text-white mb-4">Maladies associées</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {protein.diseases.map((disease, index) => (
                 <div
                   key={index}
-                  className="bg-red-50 border border-red-200 rounded-lg p-4 hover:bg-red-100 transition-colors"
+                  className="bg-red-900/30 border border-red-700 rounded-lg p-4 hover:bg-red-900/50 hover:border-red-500 transition-all cursor-pointer"
                 >
                   <div className="flex items-center">
-                    <svg className="w-6 h-6 text-red-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6 text-red-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>
-                    <span className="text-lg font-medium text-gray-900">{disease}</span>
+                    <span className="text-lg font-medium text-white">{disease}</span>
                   </div>
                 </div>
               ))}
@@ -144,16 +144,16 @@ function ProteineDetail() {
           </section>
 
           {/* Molécules connues */}
-          <section className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Molécules connues</h2>
+          <section className="bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-700 hover:border-gray-600 transition-colors">
+            <h2 className="text-2xl font-bold text-white mb-4">Molécules connues</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {protein.molecules.map((molecule, index) => (
                 <div
                   key={index}
-                  className="bg-blue-50 border border-blue-200 rounded-lg p-5 hover:shadow-lg transition-shadow"
+                  className="bg-blue-900/30 border border-blue-700 rounded-lg p-5 hover:bg-blue-900/50 hover:border-blue-500 hover:shadow-lg transition-all"
                 >
-                  <h3 className="text-xl font-bold text-blue-600 mb-2">{molecule.name}</h3>
-                  <p className="text-gray-700 text-sm">{molecule.desc}</p>
+                  <h3 className="text-xl font-bold text-blue-400 mb-2">{molecule.name}</h3>
+                  <p className="text-gray-300 text-sm">{molecule.desc}</p>
                 </div>
               ))}
             </div>
