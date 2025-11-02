@@ -1,8 +1,9 @@
+import { Link } from 'react-router-dom'
 import { backgroundVideo } from '../assets'
 
 function Home() {
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div className="relative w-full overflow-hidden min-h-[calc(100vh-4rem)]">
       {/* Video Background */}
       <video
         autoPlay
@@ -14,13 +15,24 @@ function Home() {
         <source src={backgroundVideo} type="video/mp4" />
       </video>
       
+      {/* Overlay for better text readability */}
+      <div className="absolute inset-0 bg-black/40"></div>
+      
       {/* Content Overlay */}
-      <div className="relative z-10 flex items-center justify-center h-full">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-white mb-4">Home</h1>
-          <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-colors">
-            Click me
-          </button>
+      <div className="relative z-10 flex items-center justify-center h-full min-h-[calc(100vh-4rem)] px-4">
+        <div className="text-center max-w-4xl mx-auto animate-fade-in">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 drop-shadow-lg">
+            DrugAI – L'IA qui accélère la découverte de médicaments
+          </h1>
+          <p className="text-xl md:text-2xl text-white/90 mb-8 drop-shadow-md leading-relaxed">
+            Découvrir un nouveau médicament prend en moyenne <span className="font-semibold">12 ans</span> et coûte plus de <span className="font-semibold">2 milliards de dollars</span>. Grâce à des modèles comme AlphaFold, l'intelligence artificielle permet de prédire la structure des protéines et de réduire considérablement le temps et le coût de recherche.
+          </p>
+          <Link
+            to="/recherche"
+            className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-4 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+          >
+            Explorer les protéines
+          </Link>
         </div>
       </div>
     </div>
