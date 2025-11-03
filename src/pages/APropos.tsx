@@ -1,8 +1,10 @@
+import { rawenPhoto } from '../assets'
+
 const teamMembers = [
   {
     name: 'Rawen Soltani',
-    role: 'Étudiante en Ingénierie Informatique & Full Stack JS Developer',
-    desc: 'Développeuse passionnée par les technologies web modernes et l\'intelligence artificielle'
+    role: 'Étudiante en Ingénierie Informatique & Développeuse Full Stack — Santé numérique (Marseille)',
+    desc: 'Actuellement développeuse Full Stack dans une entreprise basée à Marseille, spécialisée dans le secteur médical et la santé numérique. Passionnée par l’intelligence artificielle et la recherche scientifique, certifiée par NVIDIA (Fundamentals of Deep Learning). J’ai conçu DrugAI pour démocratiser l’accès à la bioinformatique et à la recherche médicale à travers des outils d’IA accessibles à tous.'
   }
 ]
 
@@ -269,14 +271,27 @@ function APropos() {
                   key={index}
                   className="bg-gray-800 rounded-lg shadow-lg p-8 hover:shadow-2xl hover:bg-gray-700 hover:scale-105 transition-all text-center max-w-md border border-gray-700 hover:border-blue-500"
                 >
-                  <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-full w-24 h-24 mx-auto mb-6 flex items-center justify-center shadow-lg">
-                    <span className="text-4xl font-bold text-white">
-                      {member.name.charAt(0)}
-                    </span>
+                  <div className="rounded-full w-24 h-24 mx-auto mb-6 shadow-lg overflow-hidden border border-gray-700">
+                    <img src={rawenPhoto} alt={member.name} className="w-full h-full object-cover object-top" />
                   </div>
                   <h3 className="text-2xl font-bold text-white mb-3">{member.name}</h3>
                   <p className="text-blue-400 font-semibold mb-3">{member.role}</p>
-                  <p className="text-gray-300">{member.desc}</p>
+                  <div className="bg-gray-900/50 border border-gray-700 rounded-lg p-5 text-left text-gray-300 space-y-3">
+                    <p>
+                      Actuellement développeuse Full Stack dans une entreprise basée à 
+                      <strong className="text-white"> Marseille</strong>, spécialisée dans le 
+                      <strong className="text-white"> secteur médical</strong> et la 
+                      <strong className="text-white"> santé numérique</strong>.
+                    </p>
+                    <p>
+                      Passionnée par l’intelligence artificielle et la recherche scientifique, certifiée par 
+                      <strong className="text-white"> NVIDIA</strong> (<strong className="text-white">Fundamentals of Deep Learning</strong>).
+                    </p>
+                    <p>
+                      J’ai conçu <strong className="text-white">DrugAI</strong> pour démocratiser l’accès à la bioinformatique et à la recherche médicale 
+                      à travers des outils d’IA accessibles à tous.
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
