@@ -297,6 +297,57 @@ function Guide() {
                   Une traduction automatique en français est effectuée pour améliorer l'expérience utilisateur.
                 </p>
               </div>
+
+              {/* API NCBI (Alternative) */}
+              <div className="bg-gray-900 rounded-lg p-6 border border-cyan-500/50">
+                <div className="flex items-center mb-4">
+                  <div className="bg-cyan-600 rounded-lg p-3 mr-4">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-white">NCBI Gene API (Alternative)</h3>
+                    <p className="text-gray-400 text-sm">Base de données nationale de biotechnologie</p>
+                    <span className="inline-block mt-1 px-2 py-1 text-xs bg-cyan-900/30 text-cyan-300 border border-cyan-700 rounded">
+                      API alternative disponible
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="mt-4 p-4 bg-cyan-900/10 border border-cyan-700/50 rounded">
+                  <p className="text-gray-300 text-sm mb-3">
+                    Une implémentation alternative utilisant l'<strong className="text-cyan-400">API NCBI E-utilities</strong> 
+                    est disponible dans le code comme solution de repli pour la recherche de gènes. Cette API offre :
+                  </p>
+                  <ul className="list-disc list-inside text-gray-400 text-sm ml-4 space-y-1 mb-3">
+                    <li>Accès à la base de données NCBI Gene (plus large couverture)</li>
+                    <li>Recherche par nom de gène avec filtrage par organisme</li>
+                    <li>Descriptions et résumés détaillés des gènes</li>
+                  </ul>
+                  <div className="mt-3">
+                    <h5 className="font-semibold text-cyan-300 mb-2 text-sm">Endpoints utilisés :</h5>
+                    <code className="block bg-gray-800 p-2 rounded text-xs text-cyan-300 font-mono mb-2">
+                      GET https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=gene&term=&#123;geneName&#125;[Gene+Name]+AND+human[Organism]
+                    </code>
+                    <code className="block bg-gray-800 p-2 rounded text-xs text-cyan-300 font-mono">
+                      GET https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=gene&id=&#123;geneIds&#125;
+                    </code>
+                  </div>
+                  <p className="text-gray-400 text-xs mt-3 italic">
+                    Note : Actuellement, l'application utilise principalement l'API UniProt pour la recherche de gènes. 
+                    L'API NCBI peut être activée comme alternative si nécessaire.
+                  </p>
+                </div>
+                <a 
+                  href="https://www.ncbi.nlm.nih.gov/books/NBK25501/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-cyan-400 hover:text-cyan-300 text-sm mt-2 inline-block"
+                >
+                  Documentation NCBI E-utilities →
+                </a>
+              </div>
             </div>
           </section>
 
