@@ -37,6 +37,16 @@ function Navbar() {
               Recherche
             </Link>
             <Link
+              to="/guide"
+              className={`px-3 py-2 text-sm font-medium transition-colors ${
+                isActive('/guide')
+                  ? 'text-blue-400 underline decoration-2 underline-offset-4'
+                  : 'text-gray-300 hover:text-white'
+              }`}
+            >
+              Guide
+            </Link>
+            <Link
               to="/education"
               className={`px-3 py-2 text-sm font-medium transition-colors ${
                 isActive('/education')

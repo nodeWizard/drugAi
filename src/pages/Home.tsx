@@ -29,9 +29,9 @@ function Home() {
           </p>
           <Link
             to="/recherche"
-            className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-4 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+            className="inline-block bg-blue-950 hover:bg-blue-900 text-white font-semibold px-8 py-4 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
           >
-            Explorer les protéines
+            Explorer les gènes
           </Link>
         </div>
       </div>

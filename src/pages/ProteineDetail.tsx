@@ -16,6 +16,7 @@ import {
   type UniProtEntry 
 } from '../services/uniprot'
 import { translateToFrench } from '../services/translation'
+import ProteinViewer from '../components/ProteinViewer'
 
 function ProteineDetail() {
   const { geneName, uniprotId } = useParams<{ geneName: string; uniprotId: string }>()
@@ -212,23 +213,54 @@ function ProteineDetail() {
                     )}
                   </div>
                 </div>
-                <div className="bg-gray-900 rounded-lg p-8 text-center min-h-[400px] flex items-center justify-center border border-gray-700">
-                  <div className="text-center">
-                    <svg className="w-24 h-24 mx-auto mb-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                    </svg>
-                    <p className="text-lg text-gray-300 mb-4">Visualisation 3D de {protein.uniProtkbId || protein.primaryAccession}</p>
-                    {protein.primaryAccession && (
-                      <a
-                        href={getAlphaFoldViewerUrl(protein.primaryAccession)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-block bg-blue-600 hover:bg-blue-500 text-white font-medium px-6 py-3 rounded-lg transition-colors"
-                      >
-                        Voir sur AlphaFold Database
-                      </a>
-                    )}
-                  </div>
+                {/* Visualiseur 3D intégré */}
+                <div className="bg-gray-900 rounded-lg p-4 border border-gray-700 min-h-[600px]">
+                  {alphafoldData?.bcifUrl || alphafoldData?.cifUrl || alphafoldData?.pdbUrl ? (
+                    <ProteinViewer
+                      cifUrl={alphafoldData.cifUrl}
+                      bcifUrl={alphafoldData.bcifUrl}
+                      pdbUrl={alphafoldData.pdbUrl}
+                      uniprotId={protein.primaryAccession}
+                      confidenceScores={alphafoldData ? {
+                        veryHigh: alphafoldData.fractionPlddtVeryHigh,
+                        confident: alphafoldData.fractionPlddtConfident,
+                        low: alphafoldData.fractionPlddtLow,
+                        veryLow: alphafoldData.fractionPlddtVeryLow
+                      } : undefined}
+                    />
+                  ) : (
+                    <div className="w-full h-full min-h-[600px] flex items-center justify-center">
+                      <div className="text-center">
+                        <svg className="w-24 h-24 mx-auto mb-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                        <p className="text-lg text-gray-300 mb-4">Visualisation 3D de {protein.uniProtkbId || protein.primaryAccession}</p>
+                        <p className="text-sm text-gray-400 mb-4">Fichier de structure non disponible</p>
+                        {protein.primaryAccession && (
+                          <a
+                            href={getAlphaFoldViewerUrl(protein.primaryAccession)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-block bg-blue-600 hover:bg-blue-500 text-white font-medium px-6 py-3 rounded-lg transition-colors"
+                          >
+                            Voir sur AlphaFold Database
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="mt-4 flex justify-center">
+                  {protein.primaryAccession && (
+                    <a
+                      href={getAlphaFoldViewerUrl(protein.primaryAccession)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                    >
+                      Ouvrir dans AlphaFold Database (nouvelle fenêtre)
+                    </a>
+                  )}
                 </div>
               </div>
             ) : (

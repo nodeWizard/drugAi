@@ -62,11 +62,6 @@ export const genesStaticData: Record<string, GeneStaticData> = {
     description: 'VHL (Von Hippel-Lindau Tumor Suppressor) est un suppresseur de tumeur qui régule l\'angiogenèse et l\'hypoxie. Muté dans le syndrome de von Hippel-Lindau.',
     diseases: ['Syndrome de von Hippel-Lindau', 'Cancer du rein', 'Hémangioblastome']
   },
-  'APC': {
-    name: 'APC',
-    description: 'APC (APC Regulator of WNT Signaling Pathway) est un suppresseur de tumeur qui régule la voie WNT. Muté dans la polypose adénomateuse familiale.',
-    diseases: ['Polypose adénomateuse familiale', 'Cancer colorectal']
-  },
   'STK11': {
     name: 'STK11',
     description: 'STK11 (Serine/Threonine Kinase 11), aussi appelé LKB1, est un suppresseur de tumeur qui régule le métabolisme énergétique et la polarité cellulaire.',
