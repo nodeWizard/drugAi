@@ -3,7 +3,7 @@ import { backgroundVideo } from '../assets'
 
 function Home() {
   return (
-    <div className="relative w-full overflow-hidden min-h-[calc(100vh-4rem)]">
+    <div className="relative w-full overflow-hidden min-h-[calc(100vh-4rem)] ml-[-10px]">
       {/* Video Background */}
       <video
         autoPlay
@@ -29,7 +29,7 @@ function Home() {
           </p>
           <Link
             to="/recherche"
-            className="inline-block bg-blue-950 hover:bg-blue-900 text-white font-semibold px-8 py-4 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+            className="inline-block bg-[#017a97] hover:bg-[#019ab0] text-white font-semibold px-8 py-4 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
           >
             Explorer les gènes
           </Link>

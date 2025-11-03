@@ -4,6 +4,7 @@ import { searchGeneProteins, getProteinFullName } from '../services/uniprot'
 import { translateToFrench } from '../services/translation'
 import { genes, genesStaticData, type GeneStaticData } from '../data/genesData'
 import { searchGenes, type GeneSearchResult } from '../services/geneSearch'
+import { backgroundVideo2 } from '../assets'
 
 interface GeneInfo {
   name: string
@@ -18,6 +19,8 @@ function Recherche() {
   const [autocompleteResults, setAutocompleteResults] = useState<GeneSearchResult[]>([])
   const [showAutocomplete, setShowAutocomplete] = useState(false)
   const [isSearching, setIsSearching] = useState(false)
+  const [currentPage, setCurrentPage] = useState(0)
+  const pageSize = 6
   const searchTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const autocompleteRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
@@ -25,6 +28,11 @@ function Recherche() {
   const filteredGenes = genes.filter(
     gene => gene.toLowerCase().includes(searchTerm.toLowerCase())
   )
+
+  const totalPages = Math.max(1, Math.ceil(filteredGenes.length / pageSize))
+  const pageStart = currentPage * pageSize
+  const pageEnd = pageStart + pageSize
+  const paginatedGenes = filteredGenes.slice(pageStart, pageEnd)
 
   // Recherche d'autocomplétion
   useEffect(() => {
@@ -52,6 +60,11 @@ function Recherche() {
         clearTimeout(searchTimeoutRef.current)
       }
     }
+  }, [searchTerm])
+
+  // Resetear a la primera página cuando cambia el término de búsqueda
+  useEffect(() => {
+    setCurrentPage(0)
   }, [searchTerm])
 
   // Fermer l'autocomplétion quand on clique en dehors
@@ -131,8 +144,17 @@ function Recherche() {
   }, [])
 
   return (
-    <div className="min-h-screen">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-16">
+    <div className="min-h-screen relative">
+      {/* Video de fondo */}
+      <video
+        className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-20 filter blur-sm"
+        src={backgroundVideo2}
+        autoPlay
+        muted
+        loop
+        playsInline
+      />
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-16 relative z-10">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Recherche de gènes
@@ -216,7 +238,26 @@ function Recherche() {
           {/* Results */}
           <div className="mb-4 text-gray-400">
             {filteredGenes.length > 0 ? (
-              <p>{filteredGenes.length} gène{filteredGenes.length > 1 ? 's' : ''} trouvé{filteredGenes.length > 1 ? 's' : ''}</p>
+              <div className="flex items-center justify-between">
+                <p>
+                  {filteredGenes.length} gène{filteredGenes.length > 1 ? 's' : ''} trouvé{filteredGenes.length > 1 ? 's' : ''}
+                </p>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-gray-400">Page {Math.min(currentPage + 1, totalPages)} / {totalPages}</span>
+                  <button
+                    type="button"
+                    className={`inline-flex items-center justify-center w-8 h-8 rounded-md border border-gray-700 bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white transition disabled:opacity-40 disabled:cursor-not-allowed`}
+                    onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages - 1))}
+                    disabled={currentPage >= totalPages - 1}
+                    aria-label="Page suivante"
+                    title="Page suivante"
+                  >
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
             ) : (
               <p>Aucun gène trouvé</p>
             )}
@@ -224,7 +265,7 @@ function Recherche() {
 
           {/* Gene Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {filteredGenes.map((gene) => {
+            {paginatedGenes.map((gene) => {
               const geneInfo = genesInfo[gene]
               const isLoading = !geneInfo || geneInfo.loading
               const description = geneInfo?.description || ''
@@ -236,7 +277,7 @@ function Recherche() {
                   key={gene}
                   className="bg-gray-800 rounded-lg shadow-lg hover:shadow-2xl hover:bg-gray-700 transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.02] border border-gray-700 hover:border-blue-500 p-6"
                 >
-                  <h2 className="text-2xl font-bold text-blue-400 mb-3">{gene}</h2>
+                  <h2 className="text-2xl font-bold text-[#019ab0] mb-3">{gene}</h2>
                   {isLoading ? (
                     <div className="flex items-center text-gray-400 mb-4">
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-400 mr-2"></div>
@@ -244,14 +285,14 @@ function Recherche() {
                     </div>
                   ) : (
                     <>
-                      <p className="text-gray-300 mb-4 text-sm leading-relaxed">
+                      <p className="text-white mb-4 text-sm leading-relaxed">
                         {description || staticData?.description || 'Description non disponible'}
                       </p>
                       
                       {/* Maladies associées */}
                       {diseases.length > 0 && (
                         <div className="mb-4">
-                          <h3 className="text-sm font-semibold text-gray-400 mb-2">Maladies associées :</h3>
+                          <h3 className="text-sm font-semibold text-white mb-2">Maladies associées :</h3>
                           <div className="flex flex-wrap gap-2">
                             {diseases.map((disease, index) => (
                               <span
@@ -268,7 +309,7 @@ function Recherche() {
                   )}
                   <Link
                     to={`/gene/${gene}`}
-                    className="inline-block bg-blue-600 hover:bg-blue-500 text-white font-medium px-4 py-2 rounded-md transition-all hover:scale-105 shadow-md hover:shadow-lg"
+                    className="inline-block bg-[#017a97] hover:bg-[#019ab0] text-white font-medium px-4 py-2 rounded-md transition-all hover:scale-105 shadow-md hover:shadow-lg"
                   >
                     Voir les isoformes
                   </Link>

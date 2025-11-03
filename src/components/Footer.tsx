@@ -4,8 +4,11 @@ function Footer() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-4 md:mb-0">
-            <p className="text-sm text-gray-400">
-              © 2025 DrugAI — Inspiré par AlphaFold
+            <p className="text-sm text-gray-300">
+              © 2025 DrugAI — Plateforme éducative et de recherche en bioinformatique.
+            </p>
+            <p className="text-xs text-gray-400 mt-1">
+              Inspirée par de multiples sources : AlphaFold, UniProt, Ensembl et la littérature scientifique. DrugAI ne fournit pas de conseil médical.
             </p>
           </div>
           <div className="flex space-x-6">
@@ -32,6 +35,13 @@ function Footer() {
               </svg>
             </a>
           </div>
+        </div>
+        <div className="mt-6 flex flex-wrap items-center gap-4 text-xs text-gray-400">
+          <a href="https://alphafold.ebi.ac.uk/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">AlphaFold DB</a>
+          <span className="opacity-40">•</span>
+          <a href="https://www.uniprot.org/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">UniProt</a>
+          <span className="opacity-40">•</span>
+          <a href="https://www.ensembl.org/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Ensembl</a>
         </div>
       </div>
     </footer>

@@ -21,7 +21,7 @@ function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2" onClick={closeMobileMenu}>
-            <span className="text-2xl font-bold text-blue-400">DrugAI</span>
+            <span className="text-2xl font-bold text-[#019ab0]">DrugAI</span>
           </Link>
 
           {/* Navigation Links - Desktop */}
@@ -30,7 +30,7 @@ function Navbar() {
               to="/"
               className={`px-3 py-2 text-sm font-medium transition-colors ${
                 isActive('/')
-                  ? 'text-blue-400 underline decoration-2 underline-offset-4'
+                  ? 'text-[#019ab0] underline decoration-2 underline-offset-4'
                   : 'text-gray-300 hover:text-white'
               }`}
             >
@@ -40,7 +40,7 @@ function Navbar() {
               to="/recherche"
               className={`px-3 py-2 text-sm font-medium transition-colors ${
                 isActive('/recherche')
-                  ? 'text-blue-400 underline decoration-2 underline-offset-4'
+                  ? 'text-[#019ab0] underline decoration-2 underline-offset-4'
                   : 'text-gray-300 hover:text-white'
               }`}
             >
@@ -50,7 +50,7 @@ function Navbar() {
               to="/prediction"
               className={`px-3 py-2 text-sm font-medium transition-colors ${
                 isActive('/prediction')
-                  ? 'text-blue-400 underline decoration-2 underline-offset-4'
+                  ? 'text-[#019ab0] underline decoration-2 underline-offset-4'
                   : 'text-gray-300 hover:text-white'
               }`}
             >
@@ -60,7 +60,7 @@ function Navbar() {
               to="/guide"
               className={`px-3 py-2 text-sm font-medium transition-colors ${
                 isActive('/guide')
-                  ? 'text-blue-400 underline decoration-2 underline-offset-4'
+                  ? 'text-[#019ab0] underline decoration-2 underline-offset-4'
                   : 'text-gray-300 hover:text-white'
               }`}
             >
@@ -70,7 +70,7 @@ function Navbar() {
               to="/education"
               className={`px-3 py-2 text-sm font-medium transition-colors ${
                 isActive('/education')
-                  ? 'text-blue-400 underline decoration-2 underline-offset-4'
+                  ? 'text-[#019ab0] underline decoration-2 underline-offset-4'
                   : 'text-gray-300 hover:text-white'
               }`}
             >
@@ -80,7 +80,7 @@ function Navbar() {
               to="/apropos"
               className={`px-3 py-2 text-sm font-medium transition-colors ${
                 isActive('/apropos')
-                  ? 'text-blue-400 underline decoration-2 underline-offset-4'
+                  ? 'text-[#019ab0] underline decoration-2 underline-offset-4'
                   : 'text-gray-300 hover:text-white'
               }`}
             >
@@ -92,7 +92,7 @@ function Navbar() {
           <div className="md:hidden">
             <button 
               onClick={toggleMobileMenu}
-              className="text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 rounded p-1"
+              className="text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-[#017a97] rounded p-1"
               aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? (
@@ -117,7 +117,7 @@ function Navbar() {
                 onClick={closeMobileMenu}
                 className={`block px-3 py-2 text-base font-medium rounded-md transition-colors ${
                   isActive('/')
-                    ? 'text-blue-400 bg-blue-900/30 border-l-4 border-blue-400'
+                    ? 'text-[#019ab0] bg-blue-900/30 border-l-4 border-[#019ab0]'
                     : 'text-gray-300 hover:text-white hover:bg-gray-800'
                 }`}
               >
@@ -128,7 +128,7 @@ function Navbar() {
                 onClick={closeMobileMenu}
                 className={`block px-3 py-2 text-base font-medium rounded-md transition-colors ${
                   isActive('/recherche')
-                    ? 'text-blue-400 bg-blue-900/30 border-l-4 border-blue-400'
+                    ? 'text-[#019ab0] bg-blue-900/30 border-l-4 border-[#019ab0]'
                     : 'text-gray-300 hover:text-white hover:bg-gray-800'
                 }`}
               >
@@ -139,7 +139,7 @@ function Navbar() {
                 onClick={closeMobileMenu}
                 className={`block px-3 py-2 text-base font-medium rounded-md transition-colors ${
                   isActive('/prediction')
-                    ? 'text-blue-400 bg-blue-900/30 border-l-4 border-blue-400'
+                    ? 'text-[#019ab0] bg-blue-900/30 border-l-4 border-[#019ab0]'
                     : 'text-gray-300 hover:text-white hover:bg-gray-800'
                 }`}
               >
@@ -150,7 +150,7 @@ function Navbar() {
                 onClick={closeMobileMenu}
                 className={`block px-3 py-2 text-base font-medium rounded-md transition-colors ${
                   isActive('/guide')
-                    ? 'text-blue-400 bg-blue-900/30 border-l-4 border-blue-400'
+                    ? 'text-[#019ab0] bg-blue-900/30 border-l-4 border-[#019ab0]'
                     : 'text-gray-300 hover:text-white hover:bg-gray-800'
                 }`}
               >
@@ -161,7 +161,7 @@ function Navbar() {
                 onClick={closeMobileMenu}
                 className={`block px-3 py-2 text-base font-medium rounded-md transition-colors ${
                   isActive('/education')
-                    ? 'text-blue-400 bg-blue-900/30 border-l-4 border-blue-400'
+                    ? 'text-[#019ab0] bg-blue-900/30 border-l-4 border-[#019ab0]'
                     : 'text-gray-300 hover:text-white hover:bg-gray-800'
                 }`}
               >
@@ -172,7 +172,7 @@ function Navbar() {
                 onClick={closeMobileMenu}
                 className={`block px-3 py-2 text-base font-medium rounded-md transition-colors ${
                   isActive('/apropos')
-                    ? 'text-blue-400 bg-blue-900/30 border-l-4 border-blue-400'
+                    ? 'text-[#019ab0] bg-blue-900/30 border-l-4 border-[#019ab0]'
                     : 'text-gray-300 hover:text-white hover:bg-gray-800'
                 }`}
               >
