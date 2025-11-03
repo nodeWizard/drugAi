@@ -17,6 +17,7 @@ interface ProteinViewerProps {
   cifUrl?: string
   bcifUrl?: string
   pdbUrl?: string
+  pdbString?: string
   uniprotId: string
   confidenceScores?: {
     veryHigh?: number
@@ -26,7 +27,7 @@ interface ProteinViewerProps {
   }
 }
 
-export default function ProteinViewer({ cifUrl, bcifUrl, pdbUrl, uniprotId, confidenceScores }: ProteinViewerProps) {
+export default function ProteinViewer({ cifUrl, bcifUrl, pdbUrl, pdbString, uniprotId, confidenceScores }: ProteinViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const viewerRef = useRef<Viewer3Dmol | null>(null)
   const [loading, setLoading] = useState(true)
@@ -98,6 +99,21 @@ export default function ProteinViewer({ cifUrl, bcifUrl, pdbUrl, uniprotId, conf
         })
 
         viewerRef.current = viewer
+
+        // Si on fournit directement un PDB, l'utiliser en priorité
+        if (pdbString && pdbString.trim().length > 0) {
+          viewer.addModel(pdbString, 'pdb')
+          viewer.setStyle({}, { 
+            cartoon: { 
+              color: 'spectrum',
+              thickness: 0.6
+            } 
+          })
+          viewer.zoomTo()
+          viewer.render()
+          setLoading(false)
+          return
+        }
 
         // Utiliser PDB de préférence (3Dmol le supporte mieux), sinon CIF
         // Note: BCIF n'est pas supporté par 3Dmol, donc on utilise CIF ou PDB
@@ -217,7 +233,7 @@ export default function ProteinViewer({ cifUrl, bcifUrl, pdbUrl, uniprotId, conf
       }
       viewerRef.current = null
     }
-  }, [cifUrl, bcifUrl, pdbUrl, uniprotId, confidenceScores])
+  }, [cifUrl, bcifUrl, pdbUrl, pdbString, uniprotId, confidenceScores])
 
   return (
     <div className="relative w-full h-full min-h-[600px] bg-gray-900 rounded-lg border border-gray-700">

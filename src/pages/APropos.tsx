@@ -66,6 +66,33 @@ function APropos() {
             </div>
           </section>
 
+          {/* Nouvelle fonctionnalité : Prédiction par séquence */}
+          <section className="bg-gray-800 rounded-lg shadow-lg p-8 mb-8 border border-blue-500">
+            <div className="flex items-start mb-6">
+              <div className="bg-blue-600/20 rounded-full p-3 mr-4 border border-blue-500 flex-shrink-0">
+                <svg className="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7h18M3 12h18M3 17h18" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <h2 className="text-3xl font-bold text-white mb-4">🧬 Prédiction 3D à partir de la séquence</h2>
+                <p className="text-gray-300 leading-relaxed text-lg mb-4">
+                  En plus d'explorer les structures existantes d'AlphaFold, DrugAI permet désormais de <strong className="text-white">prédire la structure 3D d'une protéine</strong> directement à partir de sa <strong className="text-white">séquence d'acides aminés</strong>, puis de l'<strong className="text-white">afficher en 3D</strong> avec une <strong className="text-white">moyenne pLDDT en %</strong>.
+                </p>
+                <ul className="list-disc list-inside text-gray-300 ml-4 space-y-1">
+                  <li>Prédiction via l'<span className="text-blue-300 font-semibold">API ESMFold</span> (ESM Atlas)</li>
+                  <li>Visualisation interactive avec <span className="text-cyan-300 font-semibold">3Dmol.js</span></li>
+                  <li>Normalisation automatique du <span className="text-white font-semibold">pLDDT</span> sur 0–100 et affichage en %</li>
+                </ul>
+                <div className="bg-blue-900/20 border border-blue-700 rounded-lg p-4 mt-4">
+                  <p className="text-gray-300 text-sm">
+                    <strong className="text-blue-300">Endpoint utilisé :</strong> <code className="text-gray-400">POST https://api.esmatlas.com/foldSequence/v1/pdb/</code>. La séquence est envoyée en texte brut et un fichier PDB est retourné avec les scores de confiance (pLDDT) encodés.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* Valeur ajoutée */}
           <section className="bg-gray-800 rounded-lg shadow-lg p-8 mb-8 border border-blue-500">
             <h2 className="text-3xl font-bold text-white mb-6">

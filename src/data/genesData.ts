@@ -12,20 +12,10 @@ export const genesStaticData: Record<string, GeneStaticData> = {
     description: 'BRCA1 (Breast Cancer 1) est une protéine de réparation de l\'ADN qui joue un rôle crucial dans la prévention du cancer du sein et des ovaires. Elle participe à la réparation des cassures double-brin de l\'ADN et maintient la stabilité génomique.',
     diseases: ['Cancer du sein', 'Cancer des ovaires', 'Cancer de la prostate']
   },
-  'BRCA2': {
-    name: 'BRCA2',
-    description: 'BRCA2 (Breast Cancer 2) est une protéine de réparation de l\'ADN qui fonctionne avec BRCA1 pour maintenir la stabilité génomique et réparer les dommages à l\'ADN.',
-    diseases: ['Cancer du sein', 'Cancer des ovaires', 'Cancer du pancréas']
-  },
   'TP53': {
     name: 'TP53',
     description: 'TP53, également appelé "garde du génome", est une protéine suppresseur de tumeur qui régule le cycle cellulaire et déclenche l\'apoptose en cas de dommages à l\'ADN. Les mutations de TP53 sont présentes dans plus de 50% des cancers humains.',
     diseases: ['Cancer du poumon', 'Leucémie', 'Cancer colorectal', 'Cancer du sein']
-  },
-  'ATM': {
-    name: 'ATM',
-    description: 'ATM (Ataxia Telangiectasia Mutated) est une kinase qui détecte les dommages à l\'ADN et active les voies de réparation. Les mutations causent l\'ataxie-télangiectasie et augmentent le risque de cancer.',
-    diseases: ['Ataxie-télangiectasie', 'Leucémie', 'Lymphome']
   },
   'CHEK2': {
     name: 'CHEK2',

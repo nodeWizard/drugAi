@@ -7,7 +7,9 @@ function Education() {
             Comment AlphaFold a révolutionné la recherche médicale
           </h1>
           <p className="text-lg text-gray-300 mb-12 text-center">
-            Découvrez comment l'intelligence artificielle transforme la découverte de médicaments
+            Découvrez comment l'intelligence artificielle transforme la découverte de médicaments.
+            Désormais, DrugAI inclut aussi la <span className="text-white font-semibold">prédiction 3D à partir d'une séquence</span>
+            avec affichage de la <span className="text-white font-semibold">confiance pLDDT en %</span>.
           </p>
 
           {/* Section 1: Pourquoi les protéines sont importantes */}
@@ -32,6 +34,52 @@ function Education() {
                   dans certaines maladies, et comment concevoir des médicaments qui ciblent spécifiquement 
                   cette protéine pour traiter des pathologies.
                 </p>
+              </div>
+            </div>
+          </section>
+
+          {/* Section: Prédiction et visualisation 3D par séquence (nouvelle fonctionnalité) */}
+          <section className="bg-blue-900/20 rounded-lg shadow-lg p-8 mb-8 border border-blue-600/60 hover:shadow-2xl hover:bg-blue-900/30 transition-all">
+            <div className="flex items-start mb-4">
+              <div className="bg-blue-600/20 rounded-full p-3 mr-4 border border-blue-500">
+                <svg className="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7h18M3 12h18M3 17h18" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <h2 className="text-3xl font-bold text-white mb-4">
+                  🧬 Prédiction et visualisation 3D à partir de la séquence (nouveau)
+                </h2>
+                <p className="text-gray-300 leading-relaxed text-lg mb-4">
+                  DrugAI permet désormais de <strong className="text-white">prédire la structure 3D d'une protéine</strong> et d'<strong className="text-white">évaluer sa confiance (pLDDT)</strong> simplement en collant sa séquence d'acides aminés. La structure est affichée en 3D avec un code couleur et un score de confiance moyen.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div className="bg-gray-900/50 rounded-lg p-4 border border-gray-700">
+                    <h3 className="text-xl font-bold text-blue-300 mb-2">Comment l'utiliser</h3>
+                    <ol className="list-decimal list-inside space-y-2 text-gray-300">
+                      <li>Ouvrez la page <span className="text-white font-semibold">Prédiction 3D</span> via le menu.</li>
+                      <li>Collez une séquence protéique au format texte (AA standard).</li>
+                      <li>Cliquez sur <span className="text-white font-semibold">Prédire la structure</span>.</li>
+                      <li>Visualisez la structure 3D et la <span className="text-white font-semibold">moyenne pLDDT (%)</span>.</li>
+                    </ol>
+                  </div>
+                  <div className="bg-gray-900/50 rounded-lg p-4 border border-gray-700">
+                    <h3 className="text-xl font-bold text-blue-300 mb-2">Interprétation de la confiance (pLDDT)</h3>
+                    <ul className="list-disc list-inside space-y-2 text-gray-300">
+                      <li><span className="text-blue-300 font-semibold">Très haute</span> : &gt; 90</li>
+                      <li><span className="text-cyan-300 font-semibold">Confiance</span> : 70–90</li>
+                      <li><span className="text-yellow-300 font-semibold">Faible</span> : 50–70</li>
+                      <li><span className="text-orange-300 font-semibold">Très faible</span> : &lt; 50</li>
+                    </ul>
+                    <p className="text-sm text-gray-400 mt-3">La moyenne pLDDT est affichée en <strong>%</strong>. Les fractions par classe sont aussi données en %.</p>
+                  </div>
+                </div>
+                <div className="bg-gray-900/50 rounded-lg p-4 border border-blue-700">
+                  <h3 className="text-xl font-bold text-blue-300 mb-2">API utilisée</h3>
+                  <p className="text-gray-300">
+                    La prédiction est effectuée via l'API <span className="text-white font-semibold">ESMFold</span> (<code className="text-gray-400">https://api.esmatlas.com/foldSequence/v1/pdb/</code>), qui retourne un fichier PDB contenant la structure et les scores pLDDT (dans les colonnes <em>B-factor</em> ou <em>occupancy</em>). Nous normalisons automatiquement ces scores sur l'échelle 0–100 pour l'affichage.
+                  </p>
+                </div>
               </div>
             </div>
           </section>

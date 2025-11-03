@@ -105,6 +105,28 @@ function Guide() {
                   </div>
                 </div>
               </div>
+
+              <div className="bg-gray-900 rounded-lg p-6 border border-blue-500">
+                <div className="flex items-start">
+                  <div className="flex items-center justify-center w-10 h-10 bg-blue-600 rounded-full text-white font-bold mr-4 flex-shrink-0">
+                    5
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-white mb-2">
+                      Prédiction 3D à partir d'une séquence
+                    </h3>
+                    <p className="text-gray-300 mb-3">
+                      Depuis la page <strong className="text-blue-400">Prédiction 3D</strong>, collez une séquence d'acides aminés, puis générez automatiquement la
+                      <strong className="text-white"> structure 3D</strong> et sa <strong className="text-white">confiance (pLDDT)</strong>.
+                    </p>
+                    <ul className="list-disc list-inside text-gray-300 space-y-1 ml-4">
+                      <li>Utilise l'<strong className="text-blue-300">ESMFold API</strong> pour calculer la structure</li>
+                      <li>Affichage interactif avec <strong className="text-cyan-300">3Dmol.js</strong></li>
+                      <li>Moyenne <strong className="text-white">pLDDT en %</strong> et fractions par classe (Très haute, Confiance, Faible, Très faible)</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
 
@@ -273,6 +295,48 @@ function Guide() {
                       <li><strong>3Dmol.js</strong> : Bibliothèque JavaScript pour la visualisation moléculaire</li>
                       <li><strong>Format PDB</strong> : Format texte standard pour les structures protéiques</li>
                       <li><strong>B-factor</strong> : Les fichiers AlphaFold stockent le pLDDT dans le champ B-factor pour la coloration par confiance</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* API ESMFold (Séquence -> Structure) */}
+              <div className="bg-gray-900 rounded-lg p-6 border border-blue-700">
+                <div className="flex items-center mb-4">
+                  <div className="bg-blue-600 rounded-lg p-3 mr-4">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7h18M3 12h18M3 17h18" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-white">ESMFold API (Sequence → Structure)</h3>
+                    <p className="text-gray-400 text-sm">Prédiction de structure 3D à partir d'une séquence</p>
+                    <a 
+                      href="https://esmatlas.com/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-blue-400 hover:text-blue-300 text-sm"
+                    >
+                      Site ESM Atlas →
+                    </a>
+                  </div>
+                </div>
+
+                <div className="mt-2">
+                  <h4 className="text-lg font-semibold text-blue-400 mb-2">Endpoint principal</h4>
+                  <code className="block bg-gray-800 p-3 rounded text-sm text-green-300 font-mono mb-2">
+                    POST https://api.esmatlas.com/foldSequence/v1/pdb/
+                  </code>
+                  <p className="text-gray-300 text-sm mb-2">
+                    Envoie une séquence d'acides aminés (texte brut) et retourne un fichier PDB avec la structure prédite. 
+                    Le score de confiance <strong>pLDDT</strong> est encodé dans les colonnes <em>B-factor</em> (0–100) ou parfois <em>occupancy</em> (0–1).
+                  </p>
+                  <div className="mt-3 p-4 bg-blue-900/20 border border-blue-700 rounded">
+                    <h5 className="font-semibold text-blue-300 mb-1">Intégration dans DrugAI</h5>
+                    <ul className="list-disc list-inside text-gray-300 text-sm ml-4 space-y-1">
+                      <li>La page <strong>Prédiction 3D</strong> permet de coller une séquence et d'obtenir la structure.</li>
+                      <li>La visualisation est réalisée avec <strong>3Dmol.js</strong> à partir du PDB retourné.</li>
+                      <li>Nous <strong>normalisons</strong> automatiquement pLDDT sur 0–100 et affichons la moyenne en %.</li>
                     </ul>
                   </div>
                 </div>

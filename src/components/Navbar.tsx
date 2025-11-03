@@ -47,6 +47,16 @@ function Navbar() {
               Recherche
             </Link>
             <Link
+              to="/prediction"
+              className={`px-3 py-2 text-sm font-medium transition-colors ${
+                isActive('/prediction')
+                  ? 'text-blue-400 underline decoration-2 underline-offset-4'
+                  : 'text-gray-300 hover:text-white'
+              }`}
+            >
+              Prédiction 3D
+            </Link>
+            <Link
               to="/guide"
               className={`px-3 py-2 text-sm font-medium transition-colors ${
                 isActive('/guide')
@@ -123,6 +133,17 @@ function Navbar() {
                 }`}
               >
                 Recherche
+              </Link>
+              <Link
+                to="/prediction"
+                onClick={closeMobileMenu}
+                className={`block px-3 py-2 text-base font-medium rounded-md transition-colors ${
+                  isActive('/prediction')
+                    ? 'text-blue-400 bg-blue-900/30 border-l-4 border-blue-400'
+                    : 'text-gray-300 hover:text-white hover:bg-gray-800'
+                }`}
+              >
+                Prédiction 3D
               </Link>
               <Link
                 to="/guide"

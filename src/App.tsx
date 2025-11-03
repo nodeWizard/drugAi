@@ -6,6 +6,7 @@ import ProteineDetail from './pages/ProteineDetail'
 import Education from './pages/Education'
 import Guide from './pages/Guide'
 import APropos from './pages/APropos'
+import Prediction from './pages/Prediction'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 
@@ -23,6 +24,7 @@ function App() {
                     <Route path="/education" element={<Education />} />
                     <Route path="/guide" element={<Guide />} />
                     <Route path="/apropos" element={<APropos />} />
+                    <Route path="/prediction" element={<Prediction />} />
           </Routes>
         </main>
         <Footer />
